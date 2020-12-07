@@ -12,7 +12,12 @@
       <div class="float-box mb-10">
         <Form>
           <Row :space="10">
-            <Cell :width="6">
+            <Cell :width="4">
+              <FormItem label="视频ID">
+                <input type="text" v-model="cond.id" placeholder="视频ID" />
+              </FormItem>
+            </Cell>
+            <Cell :width="4">
               <FormItem label="搜索">
                 <input type="text" v-model="cond.keywords" placeholder="视频标题模糊搜索" />
               </FormItem>
@@ -44,12 +49,7 @@
           @click="showTencentHlsPage()"
         ></p-button>
 
-        <p-button
-          glass="h-btn h-btn-primary h-btn-s"
-          permission="video.aliyun_videos_import"
-          text="视频批量导入"
-          @click="showVideosImport()"
-        ></p-button>
+        <p-button glass="h-btn h-btn-primary h-btn-s" permission="video.import" text="视频批量导入" @click="showVideosImport()"></p-button>
       </div>
       <div class="float-box mb-10">
         <Table :loading="loading" :checkbox="true" :datas="datas" ref="table" @sort="sortEvt">
@@ -102,7 +102,8 @@ export default {
         keywords: '',
         sort: 'created_at',
         order: 'desc',
-        course_id: null
+        course_id: null,
+        id: null
       },
       datas: [],
       loading: false,
@@ -119,6 +120,7 @@ export default {
     reset() {
       this.cond.keywords = '';
       this.cond.course_id = null;
+      this.cond.id = null;
       this.getData(true);
     },
     sortEvt(sort) {
@@ -227,7 +229,7 @@ export default {
         hasCloseIcon: true,
         component: {
           vue: resolve => {
-            require(['../extentions/aliyunVideosImport/import'], resolve);
+            require(['./import'], resolve);
           }
         }
       });

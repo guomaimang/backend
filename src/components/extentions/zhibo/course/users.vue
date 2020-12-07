@@ -1,37 +1,25 @@
 <template>
   <div class="h-panel w-800">
     <div class="h-panel-bar">
-      <span class="h-panel-title">订单</span>
+      <span class="h-panel-title">订阅用户</span>
     </div>
     <div class="h-panel-body">
       <div class="float-box mb-10">
-        <Form>
-          <Row :space="10">
-            <Cell :width="12">
-              <FormItem label="UID">
-                <user-filter v-model="filter.user_id"></user-filter>
-              </FormItem>
-            </Cell>
-            <Cell :width="12">
-              <FormItem>
-                <Button color="primary" @click="getData(true)">过滤</Button>
-                <Button @click="reset()">重置</Button>
-              </FormItem>
-            </Cell>
-          </Row>
-        </Form>
-      </div>
-
-      <div class="float-box mb-10">
         <Table :loading="loading" :datas="datas">
-          <TableItem title="UID" prop="user_id" :width="80"></TableItem>
+          <TableItem title="UID" prop="user_id" :width="100"></TableItem>
           <TableItem title="用户">
             <template slot-scope="{ data }">
               <span v-if="data.user">{{ data.user.nick_name }}</span>
-              <span v-else class="c-red">已删除</span>
+              <span class="c-red" v-else>已删除</span>
             </template>
           </TableItem>
-          <TableItem prop="charge" title="价格" unit="元"></TableItem>
+          <TableItem title="价格">
+            <template slot-scope="{ data }">
+              <span v-if="data.is_vip === 1" class="c-red">VIP免费</span>
+              <span v-else>￥{{ data.charge }}</span>
+            </template>
+          </TableItem>
+          <TableItem title="订阅时间" prop="created_at" :width="150"></TableItem>
         </Table>
       </div>
 
@@ -43,18 +31,18 @@
 </template>
 <script>
 export default {
-  props: ['id'],
+  props: ['course_id'],
   data() {
     return {
+      datas: [],
       pagination: {
         page: 1,
         size: 10,
         total: 0
       },
-      filter: {
+      filer: {
         user_id: null
       },
-      datas: [],
       loading: false
     };
   },
@@ -62,22 +50,19 @@ export default {
     this.getData(true);
   },
   methods: {
-    reset() {
-      this.filter.user_id = null;
-      this.getData(true);
-    },
     changePage() {
       this.getData();
     },
-    getData(reload = false) {
-      if (reload) {
+    getData(reset = false) {
+      if (reset) {
         this.pagination.page = 1;
       }
       this.loading = true;
       let data = this.pagination;
-      data.topic_id = this.id;
-      data.user_id = this.filter.user_id;
-      R.Extentions.meeduTopics.Order.Index(data).then(resp => {
+      Object.assign(data, {
+        id: this.course_id
+      });
+      R.Extentions.zhibo.Course.Users(data).then(resp => {
         this.datas = resp.data.data.data;
         this.pagination.total = resp.data.data.total;
         this.loading = false;

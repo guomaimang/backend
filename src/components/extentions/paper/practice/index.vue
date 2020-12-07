@@ -9,13 +9,7 @@
           <Row :space="10">
             <Cell :width="6">
               <FormItem label="分类">
-                <Select
-                  v-model="filer.category_id"
-                  :datas="categories"
-                  keyName="id"
-                  titleName="name"
-                  :filterable="true"
-                ></Select>
+                <Select v-model="filer.category_id" :datas="categories" keyName="id" titleName="name" :filterable="true"></Select>
               </FormItem>
             </Cell>
             <Cell :width="6">
@@ -33,7 +27,7 @@
         </Form>
       </div>
 
-      <div class="mb-10">
+      <div class="float-box mb-10">
         <p-button
           glass="h-btn h-btn-primary h-btn-s"
           permission="addons.Paper.paper_category.list"
@@ -52,43 +46,45 @@
         <p-del-button permission="addons.Paper.practice.delete" text="批量删除" @click="deleteSubmit()"></p-del-button>
       </div>
 
-      <Table ref="table" :loading="loading" :datas="datas" :checkbox="true" @sort="sortEvt">
-        <TableItem prop="id" title="ID" :width="80" :sort="true"></TableItem>
-        <TableItem title="分类" :width="120">
-          <template slot-scope="{ data }">
-            <span v-if="data.category">{{data.category.name}}</span>
-            <span v-else class="red">已删除</span>
-          </template>
-        </TableItem>
-        <TableItem prop="name" title="练习名"></TableItem>
-        <TableItem title="VIP免费" align="center" :width="80">
-          <template slot-scope="{ data }">
-            <span>{{data.is_vip_free === 1 ? '是' : '否'}}</span>
-          </template>
-        </TableItem>
-        <TableItem title="价格" :width="120">
-          <template slot-scope="{ data }">
-            <span v-if="data.is_free === 1" class="red">免费</span>
-            <span v-else>￥{{data.charge}}</span>
-          </template>
-        </TableItem>
-        <TableItem title="操作" align="center" :width="200">
-          <template slot-scope="{ data }">
-            <p-button
-              glass="h-btn h-btn-s h-btn-primary"
-              permission="addons.Paper.practice.update"
-              text="编辑"
-              @click="edit(data)"
-            ></p-button>
-            <p-button
-              glass="h-btn h-btn-s h-btn-primary"
-              permission="addons.Paper.practice_chapter.list"
-              text="章节"
-              @click="showChaptersPage(data)"
-            ></p-button>
-          </template>
-        </TableItem>
-      </Table>
+      <div class="float-box mb-10">
+        <Table ref="table" :loading="loading" :datas="datas" :checkbox="true" @sort="sortEvt">
+          <TableItem prop="id" title="ID" :width="80" :sort="true"></TableItem>
+          <TableItem title="分类" :width="120">
+            <template slot-scope="{ data }">
+              <span v-if="data.category">{{ data.category.name }}</span>
+              <span v-else class="red">已删除</span>
+            </template>
+          </TableItem>
+          <TableItem prop="name" title="练习名"></TableItem>
+          <TableItem prop="question_count" title="题目数" unit="个"></TableItem>
+          <TableItem title="VIP免费" align="center" :width="80">
+            <template slot-scope="{ data }">
+              <span>{{ data.is_vip_free === 1 ? '是' : '否' }}</span>
+            </template>
+          </TableItem>
+          <TableItem title="价格" :width="120">
+            <template slot-scope="{ data }">
+              <span v-if="data.is_free === 1" class="red">免费</span>
+              <span v-else>￥{{ data.charge }}</span>
+            </template>
+          </TableItem>
+          <TableItem title="操作" align="center" :width="200">
+            <template slot-scope="{ data }">
+              <p-button glass="h-btn h-btn-s h-btn-primary" permission="addons.Paper.practice.update" text="编辑" @click="edit(data)"></p-button>
+              <p-button
+                glass="h-btn h-btn-s h-btn-primary"
+                permission="addons.Paper.practice_chapter.list"
+                text="章节"
+                @click="showChaptersPage(data)"
+              ></p-button>
+            </template>
+          </TableItem>
+        </Table>
+      </div>
+
+      <div class="float-box mb-10">
+        <Pagination class="mt-10" align="right" v-model="pagination" @change="changePage" />
+      </div>
     </div>
   </div>
 </template>

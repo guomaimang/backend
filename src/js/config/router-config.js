@@ -242,6 +242,11 @@ const initRouter = () => {
         component: (resolve) => require(['components/extentions/multiLevelShare/poster/index'], resolve),
         meta: { title: '海报 - 三级分销' }
       }, {
+        path: '/MultiLevelShareGoods',
+        name: 'MultiLevelShareGoods',
+        component: (resolve) => require(['components/extentions/multiLevelShare/goods/index'], resolve),
+        meta: { title: '分销商品 - 三级分销' }
+      }, {
         path: '/Snapshot/images',
         name: 'SnapshotImages',
         component: (resolve) => require(['components/extentions/snapshot/index'], resolve),
@@ -256,6 +261,11 @@ const initRouter = () => {
         name: 'mpWechatMenu',
         component: (resolve) => require(['components/mp_wechat/menu'], resolve),
         meta: { title: '微信公众号菜单' }
+      }, {
+        path: '/CodeExchangerGoods',
+        name: 'CodeExchangerGoods',
+        component: (resolve) => require(['components/extentions/codeExchanger/goods/index'], resolve),
+        meta: { title: '兑换商品' }
       }, {
         path: '/system-error',
         name: 'SystemError',
